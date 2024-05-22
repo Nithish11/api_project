@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage> {
 
   List data = [];
   Future<void> fetchdata() async {
-    final res = await http.get(Uri.parse("https://reqres.in/api/users?page=2"));
+    final res = await http.get(Uri.parse("https://reqres.in/api/users?page=1"));
     print("API method");
     print(res.statusCode);
     print(res.body.toString());
@@ -42,6 +42,23 @@ class _HomePageState extends State<HomePage> {
               fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         backgroundColor: Colors.amber,
+        actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  data += [
+                    {
+                      "id": data.length + 1,
+                      "email": "nithishkumar@mail.in",
+                      "first_name": "Nithish",
+                      "last_name": "kumar",
+                      "avatar": "https://reqres.in/img/faces/7-image.jpg"
+                    }
+                  ];
+                });
+              },
+              icon: Icon(Icons.add_outlined)),
+        ],
         centerTitle: true,
         leading: Icon(Icons.menu),
       ),
@@ -53,6 +70,17 @@ class _HomePageState extends State<HomePage> {
               backgroundImage: NetworkImage(data[index]['avatar']),
               radius: 35,
             ),
+            trailing: IconButton(
+                onPressed: () {
+                  // print("delete button");
+                  setState(() {
+                    data.removeWhere((entry)=> entry["id"]==data[index]['id']);
+                  });
+                },
+                icon: Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                )),
             title: Text(
               data[index]['first_name'],
               style: TextStyle(
@@ -62,10 +90,7 @@ class _HomePageState extends State<HomePage> {
             ),
             subtitle: Text(
               data[index]['email'],
-              style: TextStyle(
-                fontSize: 15,
-                fontStyle: FontStyle.italic
-              ),
+              style: TextStyle(fontSize: 15, fontStyle: FontStyle.italic),
             ),
           );
         },
